@@ -1,4 +1,5 @@
 <?php
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 // Mengambil data dari Variables yang Anda set di Railway
 $host = getenv('DB_HOST');
 $user = getenv('DB_USER');
