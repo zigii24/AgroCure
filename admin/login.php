@@ -1,18 +1,23 @@
 <?php
-// login.php - Versi dengan Animasi Loading 5 Detik
 session_start();
 
-// HAPUS SEMUA SESSION TERLEBIH DAHULU
-$_SESSION = array();
+// 1. Tentukan path absolut yang pasti (Paling Aman)
+// __DIR__ merujuk pada folder tempat file login.php berada
+$db_path = __DIR__ . '/../config/database.php';
 
-include('../config/database.php');
+// 2. Debug: Cek apakah file benar-benar ada sebelum di-include
+if (!file_exists($db_path)) {
+    die("FATAL ERROR: File koneksi tidak ditemukan di path: " . $db_path);
+}
 
-// HANYA redirect jika benar-benar sudah login
+// 3. Masukkan file koneksi
+require_once($db_path);
+
+// 4. CEK LOGIN TERLEBIH DAHULU (Jangan hapus session sebelum dicek!)
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
     header('Location: dashboard.php');
     exit;
 }
-
 // Variabel error
 $error = '';
 $success_redirect = false;
