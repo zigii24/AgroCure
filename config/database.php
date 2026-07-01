@@ -1,23 +1,18 @@
 <?php
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-// Mengambil data dari Variables yang Anda set di Railway
-$host = getenv('DB_HOST');
-$user = getenv('DB_USER');
-$pass = getenv('DB_PASS');
-$db   = getenv('DB_NAME');
-$port = getenv('DB_PORT');
+// Railway akan membaca variabel ini. 
+// Jika tidak ada di Railway, ia akan menggunakan port 18862 sebagai cadangan.
+$host = getenv('MYSQLHOST');
+$user = getenv('MYSQLUSER');
+$pass = getenv('MYSQLPASSWORD');
+$db   = getenv('MYSQLDATABASE');
+$port = getenv('MYSQLPORT') ?: 18862; // Gunakan port Anda di sini
 
-// Pastikan variabel terbaca
-if (!$host || !$user || !$pass || !$db) {
-    die("ERROR: Konfigurasi Database tidak ditemukan di Environment Variables.");
+$conn = mysqli_init();
+mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL);
+
+if (!mysqli_real_connect($conn, $host, $user, $pass, $db, $port, NULL, MYSQLI_CLIENT_SSL)) {
+    die("Koneksi Database Gagal (Cek port/host di Railway): " . mysqli_connect_error());
 }
 
-$conn = mysqli_connect($host, $user, $pass, $db, $port);
-
-if (!$conn) {
-    // Menampilkan error detail agar Anda tahu apa masalahnya
-    die("Koneksi gagal: " . mysqli_connect_error());
-}
-
-mysqli_set_charset($conn, "utf8");
+mysqli_set_charset($conn, "utf8mb4");
 ?>
