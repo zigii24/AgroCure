@@ -1,8 +1,5 @@
 {
     "require": {
-        "php": ">=7.4",
-        "tecnickcom/tcpdf": "^6.10",
-        "ext-mysqli": "*",
-        "ext-pdo-mysql": "*"
+        "tecnickcom/tcpdf": "^6.10"
     }
 }
