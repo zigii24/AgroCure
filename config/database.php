@@ -1,29 +1,23 @@
 <?php
-// Paksa PHP menampilkan error ke layar
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
+// Ambil data dari Environment Variable
 $host = getenv('MYSQLHOST');
 $user = getenv('MYSQLUSER');
 $pass = getenv('MYSQLPASSWORD');
 $db   = getenv('MYSQLDATABASE');
 $port = getenv('MYSQLPORT') ?: 18862;
 
-// Inisialisasi koneksi
-$conn = mysqli_init();
+// Menggunakan cara Object Oriented (lebih standar)
+$conn = new mysqli($host, $user, $pass, $db, $port);
 
-// SSL untuk Aiven
-mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL);
-
-// Mencoba koneksi
-if (!mysqli_real_connect($conn, $host, $user, $pass, $db, $port, NULL, MYSQLI_CLIENT_SSL)) {
-    // INI AKAN MENAMPILKAN PESAN ERROR ASLI DI BROWSER
-    echo "<h1>Gagal Koneksi ke Aiven!</h1>";
-    echo "Error: " . mysqli_connect_error();
-    echo "<br>Host: $host, User: $user, Port: $port";
-    exit;
+// Cek jika ada error koneksi
+if ($conn->connect_error) {
+    die("Koneksi Gagal: " . $conn->connect_error);
 }
 
-mysqli_set_charset($conn, "utf8mb4");
+// Set karakter
+$conn->set_charset("utf8mb4");
+
+// Jika Anda tetap butuh SSL (hanya jika Aiven mewajibkan secara ketat)
+// $conn->ssl_set(NULL, NULL, NULL, NULL, NULL);
+// $conn->real_connect($host, $user, $pass, $db, $port, NULL, MYSQLI_CLIENT_SSL);
 ?>
