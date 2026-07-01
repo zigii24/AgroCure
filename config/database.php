@@ -2,7 +2,12 @@
 // Ambil data koneksi dari Environment Variables (Agar aman dan lolos GitHub)
 $host     = getenv('DB_HOST') ?: "mysql-5a5e2b3-zigiarizona8-0ea9.k.aivencloud.com";
 $username = getenv('DB_USER') ?: "avnadmin";
-$password = getenv('DB_PASSWORD'); // JANGAN TULIS PASSWORD DISINI
+// Ganti baris $password di config/database.php dengan ini:
+$password = getenv('DB_PASSWORD');
+
+if (empty($password)) {
+    die("Error: DB_PASSWORD tidak terdeteksi di Environment Variables Railway!");
+}
 $database = getenv('DB_NAME') ?: "defaultdb";
 $port     = getenv('DB_PORT'); // PORT SANGAT PENTING UNTUK AIVEN
 
