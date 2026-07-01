@@ -1,17 +1,14 @@
 <?php
-// Ambil dari variabel Railway
 $host = getenv('MYSQLHOST');
 $user = getenv('MYSQLUSER');
 $pass = getenv('MYSQLPASSWORD');
 $db   = getenv('MYSQLDATABASE');
 $port = getenv('MYSQLPORT') ?: 18862;
 
-// Koneksi standar yang didukung semua versi PHP
-$conn = mysqli_connect($host, $user, $pass, $db, $port);
-
-if (!$conn) {
-    die("Koneksi Database Gagal: " . mysqli_connect_error());
+try {
+    $conn = new PDO("mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4", $user, $pass);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Koneksi Database Gagal: " . $e->getMessage());
 }
-
-mysqli_set_charset($conn, "utf8mb4");
 ?>
